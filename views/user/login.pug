@@ -1,0 +1,11 @@
+h1 Login
+
+    if errors
+        each error in errors
+            .alert.alert-danger= error
+    form(method="POST")
+        label(for="email")
+        input#email(type="text" name="email" placeholder="Nhập email" value= email?email:"")
+        label(for="password")
+        input#password(type="password" name="password" placeholder="Nhập mật khẩu")
+        button Đăng nhập

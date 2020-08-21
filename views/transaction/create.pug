@@ -1,0 +1,15 @@
+extends ../layouts/default.pug
+
+block content
+    h1 Thêm transactions
+
+    form(method="POST")
+        label(for="user") Người thuê
+        select#user(name="user")
+            each user in users
+                option(value= user.id)= user.name
+        label(for="book") Sách
+        select#book(name="book")
+            each book in books
+                option(value= book.id)= book.title
+        button Thuê

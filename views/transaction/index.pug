@@ -1,0 +1,27 @@
+extends ../layouts/default.pug
+
+block content
+    h1 Transaction
+
+    if errors
+        each error in errors
+            .alert.alert-danger= error
+    a(href="/transactions/create") Thêm transaction
+    - let index = 0
+    table
+        tr 
+            th TT
+            th ID Người thuê
+            th ID Sách
+            th Hoàn thành
+            th Xóa
+        each transaction in transactions
+            tr
+                td= ++index
+                td= transaction.userId
+                td= transaction.bookId
+                td
+                    if !transaction.isComplete
+                        a(href= `/transactions/${transaction.id}/complete`) Xong
+                td
+                    a(href= `/transactions/${transaction.id}/delete`) Xóa

@@ -1,0 +1,11 @@
+extends ../layouts/default.pug
+
+block content
+    h1 Thêm sách
+
+    form(method="POST")
+        label(for="title")
+        input#title(type="text" name="title" placeholder="Nhập tiêu đề sách")
+        label(for="description")
+        input#description(type="text" name="description" placeholder="Nhập mô tả sách")
+        button Thêm

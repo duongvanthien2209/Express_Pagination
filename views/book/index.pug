@@ -1,0 +1,34 @@
+extends ../layouts/default.pug
+
+block content
+    h1 Books
+    - let index = 0
+
+    a(href="/books/add") Thêm sách
+
+    .container
+        .row
+            each book in books
+                .col.sm-6.md-4
+                    img.card-img-top(src= book.image)
+                    .card-body
+                        h4.card-title= book.title
+                        p.card-text= book.description
+                        a.btn.btn-primary(href="#") Thuê
+
+    //- table
+    //-     tr
+    //-         th TT
+    //-         th Tiêu đề
+    //-         th Mô tả
+    //-         th Sửa
+    //-         th Xóa
+    //-     each book in books
+    //-         tr
+    //-             td= ++index
+    //-             td= book.title
+    //-             td= book.description
+    //-             td
+    //-                 a(href= `/books/${book.id}/update`) Sửa
+    //-             td
+    //-                 a(href=`/books/${book.id}/delete`) Xóa

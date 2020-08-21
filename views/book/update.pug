@@ -1,0 +1,9 @@
+extends ../layouts/default.pug
+
+block content
+    h1 Cập nhật tiêu đề sách
+
+    form(method="POST")
+        label(for="title")
+        input#title(type="text" name="title" value= book.title)
+        button Cập nhật
