@@ -1,0 +1,15 @@
+extends ../layouts/default.pug
+
+block content
+    .container
+        h1 Cập nhật thông tin
+        
+        .row
+            .col-6
+                img.w-100(src= user.avatar?user.avatar:"https://loremflickr.com/320/240")
+            .col-6
+                form(method="POST" enctype="multipart/form-data")
+                    .form-group
+                        label(for="avatar")
+                        input#avatar.form-control-file(type="file" name="avatar")
+                    button.btn.btn-primary Cập nhật

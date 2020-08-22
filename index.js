@@ -24,6 +24,7 @@ const bookRoute = require('./routes/book.route');
 const userRoute = require('./routes/user.route');
 const transactionRoute = require('./routes/transaction.route');
 const authRoute = require('./routes/auth.route');
+const profileRoute = require('./routes/profile.route');
 
 app.use('/users', userRoute);
 app.use('/auth', authRoute);
@@ -32,6 +33,7 @@ app.use(authMiddleware.checkLogin);
 
 app.use('/books', bookRoute);
 app.use('/transactions', transactionRoute);
+app.use('/profile', profileRoute);
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT, () => {

@@ -1,0 +1,13 @@
+extends ../layouts/default.pug
+
+block content
+    .container
+        h1 Thông tin cá nhân
+        
+        .row
+            .col-6
+                img.w-100(src= user.avatar?user.avatar:"https://loremflickr.com/320/240")
+            .col-6.text-center
+                h4= user.name
+                h4= user.email
+                a(href="/profile/avatar") Cập nhật ảnh đại diện
