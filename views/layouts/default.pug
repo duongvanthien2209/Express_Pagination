@@ -9,7 +9,7 @@ head
     title Hello, world!
 body
     nav.navbar.navbar-expand-lg.navbar-light.bg-light
-        a.navbar-brand(href='#') Navbar
+        a.navbar-brand(href='#') BookShop
         button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
             span.navbar-toggler-icon
         #navbarSupportedContent.collapse.navbar-collapse
@@ -17,7 +17,9 @@ body
                 li.nav-item
                     a.nav-link(href='/books') Book
                 li.nav-item
-                    a.nav-link(href='/transactions' class= user.isAdmin?'d-none':'') Transaction
+                    a.nav-link(href='/transactions' class= user?(user.isAdmin?'d-none':''):'d-none') Transaction
+                li.nav-item
+                    a.nav-link(href='/cart') Cart
     block content
 
     // Optional JavaScript

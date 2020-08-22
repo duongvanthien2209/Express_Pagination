@@ -1,0 +1,18 @@
+extends ../layouts/default.pug
+
+block content
+    h1 Danh sách
+
+    .container
+        - let index = 0
+        table.table
+            thead
+                tr
+                    th(scope='col') #
+                    th(scope='col') Tên sách
+            tbody
+                each book in books
+                    tr
+                        td= ++index
+                        td= book.title
+        a(href="/cart/complete") Thuê

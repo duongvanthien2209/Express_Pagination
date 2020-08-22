@@ -2,36 +2,36 @@ const shortid = require('shortid');
 const db = require('../db');
 
 module.exports.getIndex = (req, res) => {
-    let { user } = res.locals;
+    // let { user } = res.locals;
     let { page } = req.query;
     let limitPage = 20;
 
-    if (!user) {
-        res.send('Có lỗi xảy ra');
-        return;
-    }
+    // if (!user) {
+    //     res.send('Có lỗi xảy ra');
+    //     return;
+    // }
 
     if(!page) {
         let books = db.get('books').value().slice(0,limitPage);
-        res.render('book/index', { books, user });
+        res.render('book/index', { books });
         return;
     }
 
     let start = (page-1)*limitPage;
     let end = start + limitPage;
     let books = db.get('books').value().slice(start, end);
-    res.render('book/index', { books, user });
+    res.render('book/index', { books });
 }
 
 module.exports.getCreate = (req, res) => {
-    let { user } = res.locals;
+    // let { user } = res.locals;
 
-    if (!user) {
-        res.send('Có lỗi xảy ra');
-        return;
-    }
+    // if (!user) {
+    //     res.send('Có lỗi xảy ra');
+    //     return;
+    // }
 
-    res.render('book/create', { user });
+    res.render('book/create');
 }
 
 module.exports.postCreate = (req, res) => {
@@ -44,15 +44,15 @@ module.exports.postCreate = (req, res) => {
 
 module.exports.getUpdate = (req, res) => {
     let { id } = req.params;
-    let { user } = res.locals;
+    // let { user } = res.locals;
 
-    if (!user) {
-        res.send('Có lỗi xảy ra');
-        return;
-    }
+    // if (!user) {
+    //     res.send('Có lỗi xảy ra');
+    //     return;
+    // }
 
     let book = db.get('books').find({ id }).value();
-    res.render('book/update', { book, user });
+    res.render('book/update', { book });
 }
 
 module.exports.postUpdate = (req, res) => {

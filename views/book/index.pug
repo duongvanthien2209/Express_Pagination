@@ -14,7 +14,7 @@ block content
                     .card-body
                         h4.card-title= book.title
                         p.card-text= book.description
-                        a.btn.btn-primary(href="#") Thuê
+                        a.btn.btn-primary(href= `/cart/${book.id}/addBook`) Thuê
 
     //- table
     //-     tr
