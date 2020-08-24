@@ -1,43 +1,60 @@
-const db = require('../db');
-const shortid = require('shortid');
+// Models
+const Book = require('../models/Book.model');
+const Session = require('../models/Session.model');
+const Transaction = require('../models/Transaction.model');
 
-module.exports.getIndex = (req,res) => {
+module.exports.getIndex = async (req, res) => {
     let { session } = res.locals;
-    let books = []
 
-    for(let item of session.books) {
-        let book = db.get('books').find({ id: item }).value();
-        books.push(book);
+    try {
+        let books = await Promise.all(session.books.map(item => {
+            return Book.findById(item);
+        }));
+        res.render('cart/index', { books });
+    } catch (error) {
+        res.send('Có lỗi xảy ra');
+        return;
     }
-
-    res.render('cart/index', { books });
 }
 
-module.exports.addBook = (req,res) => {
+module.exports.addBook = async (req, res) => {
     let { bookId } = req.params;
     let { session } = res.locals;
 
-    if(!session || !bookId) {
+    if (!session || !bookId) {
         res.send('Có lỗi xảy ra');
         return;
     }
 
-    db.get('sessions').find({ id: session.id }).assign({ books: [...session.books, bookId] }).write();
+    try {
+        await Session.findByIdAndUpdate(session._id, { $addToSet: { books: bookId } });
+    } catch (error) {
+        res.send('Có lỗi xảy ra');
+        return;
+    }
+    // db.get('sessions').find({ id: session.id }).assign({ books: [...session.books, bookId] }).write();
     res.redirect('back');
 }
 
-module.exports.complete = (req,res) => {
+module.exports.complete = async (req, res) => {
     let { session, user } = res.locals;
-    
-    if(!session || !user) {
+
+    if (!session || !user) {
         res.send('Có lỗi xảy ra');
         return;
     }
 
-    for(let item of session.books) {
-        db.get('transactions').push({ id: shortid.generate, userId: user.id, bookId: item }).write();
+    try {
+        await Promise.all(session.books.map(item => {
+            let transacion = new Transaction({ userId: user._id, bookId: item });
+            return transacion.save();
+        }));
+
+        await Session.findByIdAndUpdate(session._id, { $set: { books: [] } });
+    } catch (error) {
+        res.send('Có lỗi xảy ra');
+        return;
     }
 
-    db.get('sessions').find({ id: session.id }).assign({ books: [] }).write();
     res.redirect('/transactions');
 }

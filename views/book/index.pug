@@ -14,7 +14,10 @@ block content
                     .card-body
                         h4.card-title= book.title
                         p.card-text= book.description
-                        a.btn.btn-primary(href= `/cart/${book.id}/addBook`) Thuê
+                        .btn-group(role='group' aria-label='Basic example')
+                            a.btn.btn-primary(href= `/cart/${book._id}/addBook`) Thuê
+                            a.btn.btn-success(href= `/books/${book._id}/update`) Sửa
+                            a.btn.btn-danger(href= `/books/${book._id}/delete`) Xóa
 
     //- table
     //-     tr

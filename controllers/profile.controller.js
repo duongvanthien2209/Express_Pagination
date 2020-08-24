@@ -1,5 +1,8 @@
-const db = require('../db');
+// const db = require('../db');
 const cloudinary = require('../cloudinary');
+
+// Models
+const User = require('../models/User.model');
 
 module.exports.getIndex = (req, res) => {
     let { user } = res.locals;
@@ -34,15 +37,12 @@ module.exports.postUpdate = async (req, res) => {
 
     try {
         let result = await cloudinary.uploader.upload(file.path, { folder: 'single' });
-        db.get('users').find({ id: user.id }).assign({ avatar: result.secure_url }).write();
+        // db.get('users').find({ id: user.id }).assign({ avatar: result.secure_url }).write();
+        await User.findByIdAndUpdate(user._id, { $set: { avatar: result.secure_url } });
         res.redirect('back');
     } catch (error) {
         res.send(error);
         return;
     }
-    
-    // let avatar = '/' + file.path.split('\\').slice(1).join('/');
-    // db.get('users').find({ id: user.id }).assign({ avatar }).write();
-    // res.redirect('back');
 }
 

@@ -1,0 +1,9 @@
+extends ../layouts/default.pug
+
+block content
+    h1 Tạo shop
+    form(method="POST")
+        .form-group
+            label(for="name") Tên shop
+            input#name.from-control(type="text" name="name" placeholder="Nhập tên shop")
+        button.btn.btn-primary Tạo

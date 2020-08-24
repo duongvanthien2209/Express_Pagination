@@ -1,6 +1,7 @@
-const shortid = require('shortid');
-const db = require('../db');
 const bcrypt = require('bcrypt');
+
+// Models
+const User = require('../models/User.model');
 
 module.exports.createUser = (req, res) => {
     res.render('user/create');
@@ -8,12 +9,14 @@ module.exports.createUser = (req, res) => {
 
 module.exports.postUser = async (req, res) => {
     let { name, email, password } = req.body;
-    let id = shortid.generate();
+    // let id = shortid.generate();
 
     try {
         password = await bcrypt.hash(password, 10);
 
-        db.get('users').push({ id, name, email, password, wrongLoginCount: 0 }).write();
+        let user = new User({ name, email, password });
+        await user.save();
+        // db.get('users').push({ id, name, email, password, wrongLoginCount: 0 }).write();
     } catch (error) {
         res.send('Có lỗi xảy ra');
         return;
@@ -22,9 +25,9 @@ module.exports.postUser = async (req, res) => {
     res.redirect('/books');
 }
 
-module.exports.delete = (req, res) => {
+module.exports.delete = async(req, res) => {
     let { id } = req.params;
 
-    db.get('users').remove({ id }).write();
+    // db.get('users').remove({ id }).write();
     res.redirect('back');
 }

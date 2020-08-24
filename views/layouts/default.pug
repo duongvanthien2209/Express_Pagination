@@ -20,6 +20,14 @@ body
                     a.nav-link(href='/transactions' class= user?(user.isAdmin?'d-none':''):'d-none') Transaction
                 li.nav-item
                     a.nav-link(href='/cart') Cart
+                if user
+                    li.nav-item.dropdown
+                        a#navbarDropdown.nav-link.dropdown-toggle(href='#' role='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false')= user.name
+                        .dropdown-menu(aria-labelledby='navbarDropdown')
+                            a.dropdown-item(href='/profile') Cập nhật profile
+                            a.dropdown-item(href= user.shopId?`/shops/${user.shopId}/books`:'/shops/create')= user.shopId?'Đi tới cửa hàng':'Tạo shop'
+                            .dropdown-divider
+                            a.dropdown-item(href='#') Đăng xuất
     block content
 
     // Optional JavaScript

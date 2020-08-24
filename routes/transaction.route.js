@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const shortid = require('shortid');
-const db = require('../db');
 
 // Controllers
 const transactionController = require('../controllers/transaction.controller');

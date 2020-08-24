@@ -1,0 +1,15 @@
+extends ../layouts/default.pug
+
+block content
+    h1 Danh sách sản phẩm
+    a(href= `/shops/${shopId}/book/add` class= !isShopAdmin?'d-none':'') Thêm
+    .container
+        .row
+            each book in books
+                .col-sm-6.col-md-4
+                    .card
+                        img.card-img-top(src= book.image alt='Card image cap')
+                        .card-body
+                            h4.card-title= book.title
+                            p.card-text= book.description
+                            a.btn.btn-primary(href= `/cart/${book._id}/addBook`) Thuê

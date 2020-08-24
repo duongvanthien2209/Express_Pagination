@@ -2,9 +2,14 @@ require('dotenv').config();
 const express = require("express");
 const app = express();
 const bodyParser = require('body-parser');
-const db = require('./db');
-const shortid = require('shortid');
 const cookieParser = require('cookie-parser');
+const mongoose = require('mongoose');
+
+mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+
+mongoose.connection.on('connected', () => {
+    console.log('Kết nối thành công!!!');
+});
 
 app.use(express.static("public"));
 
@@ -27,9 +32,11 @@ const transactionRoute = require('./routes/transaction.route');
 const authRoute = require('./routes/auth.route');
 const profileRoute = require('./routes/profile.route');
 const cartRoute = require('./routes/cart.route');
+const shopRoute = require('./routes/shop.route');
 
 app.use('/users', userRoute);
 app.use('/auth', authRoute);
+app.use('/shops', shopRoute);
 
 app.use(sessionMiddleware.checkSession);
 

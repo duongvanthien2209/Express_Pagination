@@ -1,7 +1,9 @@
-const shortid = require('shortid');
-const db = require('../db');
+// Models
+const Transaction = require('../models/Transaction.model');
+const User = require('../models/User.model');
+const Book = require('../models/Book.model');
 
-module.exports.getIndex = (req, res) => {
+module.exports.getIndex = async (req, res) => {
     let { user } = res.locals;
 
     if (!user) {
@@ -9,14 +11,18 @@ module.exports.getIndex = (req, res) => {
         return;
     }
 
-    let transactions = db.get('transactions').find({ userId: user.id }).value() || [];
+    try {
+        let transactions = await Transaction.find({ userId: user._id });
 
-    res.render('transaction/index', { transactions, user });
+        res.render('transaction/index', { transactions, user });
+    } catch (error) {
+        res.send('Có lỗi xảy ra');
+        return;
+    }
+    // let transactions = db.get('transactions').find({ userId: user.id }).value() || [];
 }
 
-module.exports.getCreate = (req, res) => {
-    let users = db.get('users').value();
-    let books = db.get('books').value();
+module.exports.getCreate = async (req, res) => {
     let { user } = res.locals;
 
     if (!user) {
@@ -24,37 +30,64 @@ module.exports.getCreate = (req, res) => {
         return;
     }
 
-    res.render('transaction/create', { users, books, user });
+    try {
+        let users = await User.find();
+        let books = await Book.find();
+
+        res.render('transaction/create', { users, books, user });
+    } catch (error) {
+        res.send('Có lỗi xảy ra');
+        return;
+    }
 }
 
-module.exports.postCreate = (req, res) => {
+module.exports.postCreate = async (req, res) => {
     let { user: userId, book: bookId } = req.body;
-    let id = shortid.generate();
+    // let id = shortid.generate();
 
-    db.get('transactions').push({ id, userId, bookId, isComplete: false }).write();
+    try {
+        let transaction = new Transaction({ userId, bookId });
+        await transaction.save();
+    } catch (error) {
+        res.send('Có lỗi xảy ra');
+        return;
+    }
+    // db.get('transactions').push({ id, userId, bookId, isComplete: false }).write();
     res.redirect('/transactions');
 }
 
-module.exports.delete = (req, res) => {
+module.exports.delete = async (req, res) => {
     let { id } = req.params;
 
-    db.get('transactions').remove({ id }).write();
+    try {
+        await Transaction.findByIdAndRemove(id);
+    } catch (error) {
+        res.send('Có lỗi xảy ra');
+        return;
+    }
+    // db.get('transactions').remove({ id }).write();
     res.redirect('back');
 }
 
-module.exports.complete = (req, res) => {
+module.exports.complete = async (req, res) => {
     let { id } = req.params;
 
-    let transaction = db.get('transactions').find({ id }).value();
+    try {
+        let transaction = await Transaction.findById(id);
 
-    if (!transaction) {
-        let transactions = db.get('transactions').value();
+        if (!transaction) {
+            let transactions = await Transaction.find();
 
-        console.log('Done');
-        res.render('transaction/index', { errors: ['Transaction không tồn tại'], transactions });
+            res.render('transaction/index', { errors: ['Transaction không tồn tại'], transactions });
+            return;
+        }
+
+        transaction.isComplete = !transaction.isComplete;
+        await transaction.save();
+    } catch (error) {
+        res.send('Có lỗi xảy ra');
         return;
     }
 
-    db.get('transactions').find({ id }).assign({ isComplete: true }).write();
     res.redirect('back');
 }
